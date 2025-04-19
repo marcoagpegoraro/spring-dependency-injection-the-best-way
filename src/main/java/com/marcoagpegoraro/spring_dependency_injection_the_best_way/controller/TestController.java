@@ -4,6 +4,8 @@ import com.marcoagpegoraro.spring_dependency_injection_the_best_way.service.Prod
 import com.marcoagpegoraro.spring_dependency_injection_the_best_way.service.StockService;
 import com.marcoagpegoraro.spring_dependency_injection_the_best_way.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,12 +17,13 @@ public class TestController {
     private final ProductService productService;
     private final StockService stockService;
     private final UserService userService;
+    @Value("${featureFlag.test}") private final String featureFlag;
 
     @GetMapping
     public ResponseEntity<String> get(){
         if(productService.itsWorking() && stockService.itsWorking() && userService.itsWorking()){
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.ok("OK: " + featureFlag);
         }
-        return ResponseEntity.internalServerError().body("NOK");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body("NOK: " + featureFlag);
     }
 }
