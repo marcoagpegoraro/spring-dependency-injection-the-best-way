@@ -17,13 +17,13 @@ public class TestController {
     private final ProductService productService;
     private final StockService stockService;
     private final UserService userService;
-    @Value("${featureFlag.test}") private final String featureFlag;
+    @Value("${featureFlag.test}") private final String valueFromProperties;
 
     @GetMapping
     public ResponseEntity<String> get(){
         if(productService.itsWorking() && stockService.itsWorking() && userService.itsWorking()){
-            return ResponseEntity.ok("OK: " + featureFlag);
+            return ResponseEntity.ok("OK: " + valueFromProperties);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body("NOK: " + featureFlag);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body("NOK: " + valueFromProperties);
     }
 }
